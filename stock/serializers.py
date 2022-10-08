@@ -3,46 +3,36 @@ from .models import Category, Brand, Product, Firm, Transaction
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
         fields = ('name',)
 
 
 class BrandSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Brand
         fields = ('name',)
 
 
-# class ProductSerializer(serializers.ModelSerializer):
-#     category = serializers.StringRelatedField()
-#     category_id = serializers.IntegerField(write_only=True)
-#     brand = serializers.StringRelatedField()
-#     brand_id = serializers.IntegerField(write_only=True)
-#     class Meta: 
-#         model = Product
-#         fields = (
-#             'name',
-#             'category',
-#             'category_id',
-#             'brand',
-#             'brand_id',
-#             'stock'
-#         )
-
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-    brand = BrandSerializer()
-   
+    category = serializers.StringRelatedField()
+    category_id = serializers.IntegerField(write_only=True)
+    brand = serializers.StringRelatedField()
+    brand_id = serializers.IntegerField(write_only=True)
     class Meta: 
         model = Product
-        fields = "__all__"
+        fields = (
+            'id',
+            'name',
+            'category',
+            'category_id',
+            'brand',
+            'brand_id',
+            'stock'
+        )
 
 
 class FirmSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Firm
         fields = "__all__"

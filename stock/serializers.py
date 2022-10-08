@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import Category, Brand, Product, Firm, Transaction
+from .models import (
+    Category, 
+    Brand, 
+    Product, 
+    Firm, 
+    Transaction
+)
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -39,6 +45,26 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = ('stock',)
 
 
+class CategoryProductsSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True)
+    class Meta:
+        model = Category
+        fields = (
+            'name',
+            'products'
+        )
+
+
+class BrandProductsSerializer(serializers.ModelSerializer):
+    b_products = ProductSerializer(many=True)
+    class Meta:
+        model = Brand
+        fields = (
+            'name',
+            'b_products'
+        )
+
+
 class FirmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Firm
@@ -56,7 +82,6 @@ class TransactionSerializer(serializers.ModelSerializer):
     firm_id = serializers.IntegerField()
     product = serializers.StringRelatedField()
     product_id = serializers.IntegerField()
-
     class Meta:
         model = Transaction
         fields = (

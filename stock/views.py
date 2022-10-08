@@ -1,32 +1,48 @@
-from django.shortcuts import render
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
+
 from .serializers import BrandSerializer, CategorySerializer, FirmSerializer, ProductSerializer, TransactionSerializer
-from rest_framework import viewsets
 from .models import Category, Brand, Product, Firm, Transaction
-from .permissions import IsStafforReadOnly
+
 
 
 #   GET, POST, PUT, PATCH, DELETE
 class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsStafforReadOnly,)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 
 
 class BrandView(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 
 
 class ProductView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['category', 'brand']
+    search_fields = ['name']
 
 
 class FirmView(viewsets.ModelViewSet):
     queryset = Firm.objects.all()
     serializer_class = FirmSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 
 
 class TransactionView(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['firm', 'transaction_type', 'product']
+    search_fields = ['firm']
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+

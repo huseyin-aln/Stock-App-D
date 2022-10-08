@@ -3,14 +3,13 @@ from .views import CategoryView, BrandView, ProductView, FirmView, TransactionVi
 
 
 router = routers.DefaultRouter()
-router.register('categories', CategoryView)
-router.register('brands', BrandView)
-router.register('products', ProductView)
-router.register('firms', FirmView)
-router.register('transactions', TransactionView)
+router.register('category', CategoryView)
+router.register('brand', BrandView)
+router.register('product', ProductView)
+router.register('firm', FirmView)
+router.register('transaction', TransactionView)
 
 urlpatterns = [
     
-]
+] + router.urls
 
-urlpatterns += router.urls
